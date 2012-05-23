@@ -4,7 +4,7 @@ import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
 import play.api.libs.json.{JsArray, JsString, JsObject, Writes}
 
-case class AbstractStory(headline: String, tags:Seq[String], publicationDate: DateTime)
+case class AbstractStory(headline: String, tags:Seq[String], publicationDate: DateTime, source: String)
 
 object AbstractStory {
   implicit object GuImporterJsonWriter extends Writes[AbstractStory] {
@@ -14,6 +14,7 @@ object AbstractStory {
         ("headline" -> JsString(o.headline))
           :: ("publicationDate") -> JsString(timeFormatter.print(o.publicationDate))
           :: ("tags") -> JsArray(o.tags.map(JsString(_)))
+          :: ("source") -> JsString(o.source)
           :: Nil)
     }
   }

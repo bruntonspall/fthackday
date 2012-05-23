@@ -33,7 +33,8 @@ object NYTNewsStreamStoryCollector extends StoryImporter {
           AbstractStory(
             title,
             tags,
-            pubTime
+            pubTime,
+            "NYT"
           )
         }
     }
@@ -65,7 +66,8 @@ object NYTSearchStoryCollector extends StoryImporter {
           AbstractStory(
             title,
             tags,
-            pubTime
+            pubTime,
+            "FT"
           )
         }
     }

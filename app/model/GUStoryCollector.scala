@@ -16,7 +16,8 @@ object GUStoryCollector extends StoryImporter {
             AbstractStory(
               (result \ "webTitle").as[String],
               (result \ "tags" \\ "webTitle").map(_.as[String]),
-              parseDate((result \ "webPublicationDate").as[String])
+              parseDate((result \ "webPublicationDate").as[String]),
+              "GU"
             )
         }
     }

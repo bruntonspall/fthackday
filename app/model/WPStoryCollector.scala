@@ -21,7 +21,8 @@ object WPStoryCollector extends StoryImporter {
             AbstractStory(
               (result \ "title").as[String],
               Nil,
-              parseDate((result \ "date").as[String])
+              parseDate((result \ "date").as[String]),
+              "WP"
             )
         }
       }

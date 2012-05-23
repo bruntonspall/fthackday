@@ -22,7 +22,8 @@ object FTStoryCollector extends StoryImporter {
               case 200 => Some(AbstractStory(
                 (result \ "title" \ "title").as[String],
                 (itemResponse.json \ "item" \ "metadata" \ "tags" \\ "name").map(_.as[String]),
-                parseDate((result \ "lifecycle" \ "lastPublishDateTime").as[String])
+                parseDate((result \ "lifecycle" \ "lastPublishDateTime").as[String]),
+                "FT"
               ))
               case _ => None
             }

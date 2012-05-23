@@ -6,7 +6,7 @@ import libs.json.Reads
 import play.api.mvc._
 import org.joda.time.DateTime
 import play.api.libs.json.Json._
-import model.{FTStoryCollector, AbstractStory, GuImporter, NYTStoryCollector}
+import model._
 
 object Application extends Controller {
   implicit val reads = Reads
@@ -18,7 +18,7 @@ object Application extends Controller {
   def stats = Action {
     val dt = DateTime.now.minusHours(24)
     val allStories : Promise[Seq[AbstractStory]] = for {
-      gustory <- GuImporter.storiesSince(dt)
+      gustory <- GUStoryCollector.storiesSince(dt)
       ftstory <- FTStoryCollector.storiesSince(dt)
       nytstory <- NYTStoryCollector.storiesSince(dt)
     } yield gustory ++ ftstory ++ nytstory
@@ -33,12 +33,14 @@ object Application extends Controller {
   }
 
   def stats_gu = Action {
-    Ok(toJson(GuImporter.storiesSince(DateTime.now.minusHours(24)).await.get))
+    Ok(toJson(GUStoryCollector.storiesSince(DateTime.now.minusHours(24)).await.get))
   }
 
   def stats_nyt = Action {
-
     Ok(toJson(NYTStoryCollector.storiesSince(DateTime.now.minusHours(24)).await.get))
   }
-  
+
+  def stats_wp = Action {
+    Ok(toJson(WPStoryCollector.storiesSince(DateTime.now.minusHours(24)).await.get))
+  }
 }

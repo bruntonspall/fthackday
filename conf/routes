@@ -7,6 +7,7 @@ GET     /                           controllers.Application.index
 GET     /stories/ft                 controllers.Application.stats_ft
 GET     /stories/nyt                 controllers.Application.stats_nyt
 GET     /stories/gu                 controllers.Application.stats_gu
+GET     /stories/wp                 controllers.Application.stats_wp
 GET     /stories                 controllers.Application.stats
 
 # Map static resources from the /public folder to the /assets URL path

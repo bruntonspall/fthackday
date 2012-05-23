@@ -5,8 +5,8 @@ import org.joda.time.format.{ISODateTimeFormat, DateTimeFormat}
 import play.api.libs.json.{Writes, JsArray}
 import play.api.Logger
 
-object GuImporter extends StoryImporter {
-  val log = Logger("GuImporter")
+object GUStoryCollector extends StoryImporter {
+  val log = Logger("GUStoryCollector")
   def storiesSince(dt: DateTime) = {
     val url = "http://content.guardianapis.com/search.json?show-tags=keyword&from-date="+
       ISODateTimeFormat.dateTimeNoMillis.withZoneUTC().print(dt)

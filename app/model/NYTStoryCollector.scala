@@ -23,14 +23,6 @@ object NYTStoryCollector {
         val results = (response.json \ "results").asInstanceOf[JsArray]
         results.value map { result =>
 
-          println("title = " + (result \ "title").as[String])
-          println("updated date = " + (result \ "updated_date").as[String])
-          println("tags = ")
-          (result \ "des_facet") match {
-            case ts: JsArray => ts.value.foreach{v => println("\t"+ v.as[String])}
-            case _ => println("NO TAGS")
-          }
-
           val title = (result \ "title").as[String]
           val tags = (result \ "des_facet") match {
             case ts: JsArray => ts.value.map{v => v.as[String] }

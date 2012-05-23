@@ -1,0 +1,23 @@
+@(message: String, style: String = "Scala", playhome: String ="http://www.playframework.org")
+
+<div class="container">
+    <div class="row">
+        <div class="push4 span8"><h1>News Stream</h1></div>
+    </div>
+    <div class=row>
+        <div class="span4" id="graph1"></div>
+    </div>
+</div>
+
+<script>
+    $(function() {
+        var g = $("#graph1");
+        $.getJSON("/stories", function(results) {
+            console.log(results);
+            $.each(results, function(index, result) {
+                console.log(result);
+                g.append(tim("<li>{{headline}} - via {{source}}</li>", result));
+            })
+        })
+    })
+</script>

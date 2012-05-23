@@ -24,27 +24,28 @@ object Application extends Controller {
     } yield gustory ++ ftstory ++ nytstory
 
     val sortedStories = allStories map { stories => stories.sortWith((a,b) => a.publicationDate.isBefore(b.publicationDate))}
-//        val stories = GuImporter.storiesSince(dt)
-    Ok(toJson(sortedStories.await.get))
+    Async {
+      sortedStories map (x => Ok(toJson(x)))
+    }
   }
 
-  def stats_ft = Action {
-    Ok(toJson(FTStoryCollector.storiesSince(DateTime.now.minusHours(24)).await.get))
-  }
+  def stats_ft = Action { Async {
+    FTStoryCollector.storiesSince(DateTime.now.minusHours(24)) map (x => Ok(toJson(x)))
+  }}
 
-  def stats_gu = Action {
-    Ok(toJson(GUStoryCollector.storiesSince(DateTime.now.minusHours(24)).await.get))
-  }
+  def stats_gu = Action { Async {
+    GUStoryCollector.storiesSince(DateTime.now.minusHours(24)) map (x => Ok(toJson(x)))
+  }}
 
-  def stats_nyt_news = Action {
-    Ok(toJson(NYTNewsStreamStoryCollector.storiesSince(DateTime.now.minusHours(24)).await.get))
-  }
+  def stats_nyt_news = Action { Async {
+    NYTNewsStreamStoryCollector.storiesSince(DateTime.now.minusHours(24)) map (x => Ok(toJson(x)))
+  }}
 
-  def stats_nyt_search = Action {
-    Ok(toJson(NYTSearchStoryCollector.storiesSince(DateTime.now.minusHours(24)).await.get))
-  }
+  def stats_nyt_search = Action { Async {
+    NYTSearchStoryCollector.storiesSince(DateTime.now.minusHours(24)) map (x => Ok(toJson(x)))
+  }}
 
-  def stats_wp = Action {
-    Ok(toJson(WPStoryCollector.storiesSince(DateTime.now.minusHours(24)).await.get))
-  }
+  def stats_wp = Action { Async {
+    WPStoryCollector.storiesSince(DateTime.now.minusHours(24)) map (x => Ok(toJson(x)))
+  }}
 }

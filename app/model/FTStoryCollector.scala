@@ -3,8 +3,8 @@ package model
 import org.joda.time.DateTime
 import play.api.libs.ws.{Response, WS}
 import model.AbstractStory
-import play.api.libs.json.{Reads, JsArray}
 import org.joda.time.format.ISODateTimeFormat
+import play.api.libs.json.{JsValue, Reads, JsArray}
 
 object FTStoryCollector {
   def storiesSince(dt: DateTime) = {
@@ -14,15 +14,14 @@ object FTStoryCollector {
       """{ "queryString": "-zxxzxz AND (lastPublishDateTime:>2012-05-23T14:00:00Z)"}"""
     ) map {
       response =>
-        val results = (response.json \ "results").asInstanceOf[JsArray]
-        results.value map {
-          result =>
+        (response.json \ "results" \\ "results").flatMap(_.asInstanceOf[JsArray].value map {
+          result : JsValue =>
             AbstractStory(
-              (result \ "title").as[String],
+              (result \ "title" \ "title").as[String],
               Nil,
               DateTime.parse((result \ "lifecycle" \ "lastPublishDateTime").as[String], ISODateTimeFormat.dateTimeNoMillis())
             )
-        }
+        })
     }
   }
 }

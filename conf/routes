@@ -5,7 +5,8 @@
 # Home page
 GET     /                           controllers.Application.index
 GET     /stories/gu                 controllers.Application.stats_gu
-GET     /stories/nyt                 controllers.Application.stats_nyt
+GET     /stories/nyt/news                 controllers.Application.stats_nyt_news
+GET     /stories/nyt/search                 controllers.Application.stats_nyt_search
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

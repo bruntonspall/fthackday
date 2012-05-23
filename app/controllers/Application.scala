@@ -5,7 +5,7 @@ import libs.json.Reads
 import play.api.mvc._
 import org.joda.time.DateTime
 import play.api.libs.json.Json._
-import model.{NYTStoryCollector, AbstractStory, GuImporter}
+import model.{NYTSearchStoryCollector, NYTNewsStreamStoryCollector, AbstractStory, GuImporter}
 
 object Application extends Controller {
   implicit val reads = Reads
@@ -19,9 +19,14 @@ object Application extends Controller {
     Ok(toJson(GuImporter.storiesSince(DateTime.now.minusHours(24)).await.get))
   }
 
-  def stats_nyt = Action {
+  def stats_nyt_news = Action {
 
-    Ok(toJson(NYTStoryCollector.storiesSince(DateTime.now.minusHours(24)).await.get))
+    Ok(toJson(NYTNewsStreamStoryCollector.storiesSince(DateTime.now.minusHours(24)).await.get))
+  }
+
+  def stats_nyt_search = Action {
+
+    Ok(toJson(NYTSearchStoryCollector.storiesSince(DateTime.now.minusHours(24)).await.get))
   }
   
 }

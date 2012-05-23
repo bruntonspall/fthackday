@@ -11,7 +11,7 @@ object FTStoryCollector extends StoryImporter {
     implicit val reads = Reads
 
     WS.url("http://api.ft.com/content/search/v1?apiKey=8f4a8b83f48c4eecf9b6b64c90a4451b").post(
-      """{ "queryString": "-zxxzxz AND (lastPublishDateTime:>%s)"}""".format(dateFormat.print(dt))
+      """{ "queryString": "lastPublishDateTime:>%s"}""".format(dateFormat.print(dt))
     ) flatMap { response =>
       Promise.sequence((response.json \ "results" \\ "results").flatMap(_.asInstanceOf[JsArray].value map {
         result : JsValue =>

@@ -18,13 +18,16 @@ object FTStoryCollector extends StoryImporter {
           val contentApiUrl = (result \ "apiUrl").as[String]
 
           WS.url("%s?apiKey=8f4a8b83f48c4eecf9b6b64c90a4451b".format(contentApiUrl)).get() map { itemResponse =>
-            AbstractStory(
-              (result \ "title" \ "title").as[String],
-              (itemResponse.json \ "item" \ "metadata" \ "tags" \\ "name").map(_.as[String]),
-              parseDate((result \ "lifecycle" \ "lastPublishDateTime").as[String])
-            )
+            itemResponse.status match {
+              case 200 => Some(AbstractStory(
+                (result \ "title" \ "title").as[String],
+                (itemResponse.json \ "item" \ "metadata" \ "tags" \\ "name").map(_.as[String]),
+                parseDate((result \ "lifecycle" \ "lastPublishDateTime").as[String])
+              ))
+              case _ => None
+            }
           }
-      }))
+      })) map (_.flatten)
     }
   }
 }

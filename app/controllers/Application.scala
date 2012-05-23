@@ -20,7 +20,7 @@ object Application extends Controller {
     val allStories : Promise[Seq[AbstractStory]] = for {
       gustory <- GUStoryCollector.storiesSince(dt)
       ftstory <- FTStoryCollector.storiesSince(dt)
-      nytstory <- NYTStoryCollector.storiesSince(dt)
+      nytstory <- NYTNewsStreamStoryCollector.storiesSince(dt)
     } yield gustory ++ ftstory ++ nytstory
 
     val sortedStories = allStories map { stories => stories.sortWith((a,b) => a.publicationDate.isBefore(b.publicationDate))}
@@ -36,8 +36,12 @@ object Application extends Controller {
     Ok(toJson(GUStoryCollector.storiesSince(DateTime.now.minusHours(24)).await.get))
   }
 
-  def stats_nyt = Action {
-    Ok(toJson(NYTStoryCollector.storiesSince(DateTime.now.minusHours(24)).await.get))
+  def stats_nyt_news = Action {
+    Ok(toJson(NYTNewsStreamStoryCollector.storiesSince(DateTime.now.minusHours(24)).await.get))
+  }
+
+  def stats_nyt_search = Action {
+    Ok(toJson(NYTSearchStoryCollector.storiesSince(DateTime.now.minusHours(24)).await.get))
   }
 
   def stats_wp = Action {

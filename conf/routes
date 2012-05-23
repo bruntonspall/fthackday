@@ -4,8 +4,9 @@
 
 # Home page
 GET     /                           controllers.Application.index
+GET     /stories/nyt/news                 controllers.Application.stats_nyt_news
+GET     /stories/nyt/search                 controllers.Application.stats_nyt_search
 GET     /stories/ft                 controllers.Application.stats_ft
-GET     /stories/nyt                 controllers.Application.stats_nyt
 GET     /stories/gu                 controllers.Application.stats_gu
 GET     /stories/wp                 controllers.Application.stats_wp
 GET     /stories                 controllers.Application.stats

@@ -1,11 +1,24 @@
 @main("Guess The Headline") {
 <div class="container">
-    <div class="hero-unit">
-        <p>Guess the source the headline came from</p>
+    <div class="hero-unit" style="margin-top: 50px">
+        <h1 data-publisher="GU">A long headline that might come from the mail</h1>
+        <div>
+            <button class="btn" data-publisher="GU">Guardian</button>
+            <button class="btn" data-publisher="MO">MailOnline</button>
+            <button class="btn" data-publisher="FT">FT</button>
+            <button class="btn" data-publisher="WP">Wordpress.com</button>
+            <button class="btn" data-publisher="NYT">NYTimes</button>
+        </div>
+    </div>
+    <div class="alert">
+        <button class="close" data-dismiss="alert">×</button>
+        <strong>Wrong!</strong> Nope, it actually came from Sheep Sheerers Weekly
+    </div>
+    <div class="alert alert-success">
+        Yes you are right, it came from The Daily Planet
     </div>
     <div class="row">
-        <div class="span5"><h1>A long headline that might come from the mail</h1></div>
-        <div class="span5"><h1>Basket Weaving is awesome</h1></div>
+        <div class="push4 span4"><p>You have <h2>2</h2> correct</div>
     </div>
 </div>
 }

@@ -49,9 +49,8 @@ object NYTSearchStoryCollector extends StoryImporter {
 
   def storiesSince(dt: DateTime) = { // actually stories on (and only one page at that...)
 
-    dt.toString(ISODateTimeFormat.basicDate())
-
-    WS.url("http://api.nytimes.com/svc/search/v1/article?format=json&query=+date:%s&fields=date,title,des_facet&api-key=%s".format(dt.toString(ISODateTimeFormat.basicDate()), key)).get.map {
+    WS.url("http://api.nytimes.com/svc/search/v1/article?format=json&query=+date:%s&fields=date,title,des_facet&api-key=%s".
+      format(dateFormat.print(dt), key)).get.map {
       response =>
         val results = (response.json \ "results").asInstanceOf[JsArray]
         results.value map { result =>
@@ -61,7 +60,7 @@ object NYTSearchStoryCollector extends StoryImporter {
             case ts: JsArray => ts.value.map{v => v.as[String] }
             case _ => Nil
           }
-          val pubTime = DateTime.parse((result \ "date").as[String], ISODateTimeFormat.basicDate())
+          val pubTime = parseDate((result \ "date").as[String])
 
           AbstractStory(
             title,

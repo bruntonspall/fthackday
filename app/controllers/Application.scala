@@ -2,13 +2,13 @@ package controllers
 
 import play.api._
 import libs.concurrent.Promise
-import libs.json.{JsArray, JsString, JsObject, Reads}
+import libs.json._
 import play.api.mvc._
-import org.joda.time.DateTime
 import play.api.libs.json.Json._
 import model._
 import org.joda.time.format.ISODateTimeFormat
 import util.Random
+import org.joda.time.{Interval, DateTime}
 
 object Application extends Controller {
   implicit val reads = Reads
@@ -135,4 +135,32 @@ object Application extends Controller {
   def stories_timeline_js = Action { Async {
     sortedStories map (x => Ok(to_timeline_json(x)))
   }}
+
+  def metric(source: String, start: String, stop: String, step: Int) = Action {
+    val startTime = DateTime.parse(start, ISODateTimeFormat.dateTime())
+    val endTime = DateTime.parse(stop, ISODateTimeFormat.dateTime())
+    val steps = new Interval(startTime, endTime).toDurationMillis / step
+
+    Async {
+      collector(source).storiesSince(DateTime.now.minusHours(24)) map (all => {
+        val counts: Seq[Int] = for {
+          i <- 1L to steps
+        } yield {
+          val stepStart = startTime.plus(step * (i - 1))
+          val stepEnd = startTime.plus(step * (i))
+          val inPeriod = all.filter {x => x.publicationDate.isAfter(stepStart) && x.publicationDate.isBefore(stepEnd)}
+
+          inPeriod.size
+        }
+        implicit val writes = Writes
+        Ok(toJson(counts))
+      })
+    }
+  }
+  val collector = Map(
+    "Guardian" -> GUStoryCollector,
+    "FT" -> FTStoryCollector,
+    "NYT" -> NYTSearchStoryCollector,
+    "Wordpress" -> WPStoryCollector
+  )
 }

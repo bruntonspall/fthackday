@@ -6,11 +6,13 @@ import org.joda.time.format.ISODateTimeFormat
 import play.api.libs.json.{JsValue, Reads, JsArray}
 import play.api.libs.concurrent.Promise
 import play.api.cache.Cache
-import play.api.Application
 import cache.CacheThatMakesPromises
+import play.api.{Logger, Application}
 
 object FTStoryCollector extends StoryImporter {
   import play.api.Play.current
+
+  val log = Logger(this.getClass.getSimpleName)
 
   def storiesSince(dt: DateTime) = {
     implicit val reads = Reads
@@ -33,11 +35,11 @@ object FTStoryCollector extends StoryImporter {
                     "FT"
                   ))
                 }
-                case code => Left("Status code:%s was unexpected" format (code))
+                case code => Left("Status code:%s was unexpected, \nresponse:\n%s" format (code, itemResponse.body))
               }
             }
           }
-      })) map {x :Seq[Either[String, AbstractStory]] => (x map (_.right.toOption)).flatten }
+      })) map {x :Seq[Either[String, AbstractStory]] => (x map (_.fold ({l => log.error(l); None} , {r => Some(r)}))).flatten }
     }
   }
 }

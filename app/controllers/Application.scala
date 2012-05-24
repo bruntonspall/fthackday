@@ -16,16 +16,22 @@ object Application extends Controller {
     Ok(views.html.index("Your new application is ready."))
   }
 
-  def dt = DateTime.now.minusHours(24)
-  def allStories : Promise[Seq[AbstractStory]] = for {
-    gustory <- GUStoryCollector.storiesSince(dt)
-    ftstory <- FTStoryCollector.storiesSince(dt)
-    nytstory <- NYTNewsStreamStoryCollector.storiesSince(dt)
-  } yield gustory ++ ftstory ++ nytstory
+  def allStories = {
+    val dt = DateTime.now.minusHours(24)
+    val allStories : Promise[Seq[AbstractStory]] = for {
+      gustory <- GUStoryCollector.storiesSince(dt)
+      ftstory <- FTStoryCollector.storiesSince(dt)
+      nytstory <- NYTSearchStoryCollector.storiesSince(dt)
+    } yield gustory ++ ftstory ++ nytstory
+
+    allStories
+  }
 
   def sortedStories = allStories map { stories => stories.sortWith((a,b) => a.publicationDate.isBefore(b.publicationDate))}
 
+
   def stats = Action {
+
     Async {
       sortedStories map (x => Ok(toJson(x)))
     }
@@ -77,6 +83,6 @@ object Application extends Controller {
   }
 
   def stories_timeline_js = Action { Async {
-    allStories map (x => Ok(to_timeline_json(x)))
+    sortedStories map (x => Ok(to_timeline_json(x)))
   }}
 }

@@ -23,15 +23,7 @@ object Application extends Controller {
     case _ => "black"
   }
 
-  def icon_for(source: String) = source match {
-    case "FT" => "http://www.ft.com/favicon.ico"
-    case "GU" => "http://www.guardian.co.uk/favicon.ico"
-    case "NYT" => "http://www.nytimes.com/favicon.ico"
-    case "WP" => "http://www.wordpress.com/favicon.ico"
-    case "MO" => "http://www.dailymail.co.uk/favicon.ico"
-    case _ => ""
-
-  }
+  def icon_for(source: String) = routes.Assets.at("images/new-"+source+".ico").toString
 
   def index = Action {
     Ok(views.html.index("Your new application is ready."))

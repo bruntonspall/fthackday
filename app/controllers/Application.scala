@@ -8,6 +8,7 @@ import org.joda.time.DateTime
 import play.api.libs.json.Json._
 import model._
 import org.joda.time.format.ISODateTimeFormat
+import util.Random
 
 object Application extends Controller {
   implicit val reads = Reads
@@ -46,9 +47,19 @@ object Application extends Controller {
 
   def sortedStories = allStories map { stories => stories.sortWith((a,b) => a.publicationDate.isBefore(b.publicationDate))}
 
+  val random = new Random()
+
+  def top4PerProvider = allStories map { stories =>
+    val storiesBySource = stories.groupBy(_.source)
+    val topStoriesBySource = storiesBySource.mapValues(ss => ss.sortWith((a,b) => a.publicationDate.isBefore(b.publicationDate)).take(4))
+
+    val topStories = topStoriesBySource.values.flatMap(ss=>ss).toList
+    random.shuffle(topStories)
+  }
+
+  def topGrid = Action { Async { top4PerProvider map (foo => Ok(views.html.topgrid(foo))) }}
 
   def stats = Action {
-
     Async {
       sortedStories map (x => Ok(toJson(x)))
     }
@@ -91,7 +102,7 @@ object Application extends Controller {
         m + (s -> (m.getOrElse(s, 0) + 1))
       }
 
-      wordsWithCount.keys.toList.sortBy(s => wordsWithCount.get(s)).reverse
+      wordsWithCount.keys.toList.sortBy(s => wordsWithCount.get(s)).reverse.take(250)
     }
     Async {
       headlineWords map {w => Ok(toJson(w))}
@@ -124,5 +135,4 @@ object Application extends Controller {
   def stories_timeline_js = Action { Async {
     sortedStories map (x => Ok(to_timeline_json(x)))
   }}
-
 }

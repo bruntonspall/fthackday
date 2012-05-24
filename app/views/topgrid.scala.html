@@ -1,0 +1,19 @@
+@(stories: Seq[model.AbstractStory])
+
+@main("News Grid") {
+<div class="container">
+    @for(row <- stories.sliding(4,4)) {
+    <div class="row">
+    <tr>
+        @for(story <- row) {
+        <div class="span3 source-@story.source">
+            <h2>@Html(story.headline)</h2>
+            <p>@Html(story.trail)</p>
+            <p>@story.source</p>
+        </div>
+        }
+    </tr>
+    </div>
+    }
+</div>
+}

@@ -15,13 +15,18 @@ object Application extends Controller {
     Ok(views.html.index("Your new application is ready."))
   }
 
-  def stats = Action {
+  def allStories = {
     val dt = DateTime.now.minusHours(24)
     val allStories : Promise[Seq[AbstractStory]] = for {
       gustory <- GUStoryCollector.storiesSince(dt)
       ftstory <- FTStoryCollector.storiesSince(dt)
-      nytstory <- NYTNewsStreamStoryCollector.storiesSince(dt)
+      nytstory <- NYTSearchStoryCollector.storiesSince(dt)
     } yield gustory ++ ftstory ++ nytstory
+
+    allStories
+  }
+
+  def stats = Action {
 
     val sortedStories = allStories map { stories => stories.sortWith((a,b) => a.publicationDate.isBefore(b.publicationDate))}
     Async {
@@ -48,4 +53,8 @@ object Application extends Controller {
   def stats_wp = Action { Async {
     WPStoryCollector.storiesSince(DateTime.now.minusHours(24)) map (x => Ok(toJson(x)))
   }}
+
+//  def allWords = Action { Async {
+//
+//  }}
 }

@@ -15,6 +15,9 @@ object Application extends Controller {
   def index = Action {
     Ok(views.html.index("Your new application is ready."))
   }
+  def timeline = Action {
+    Ok(views.html.timeline())
+  }
 
   def allStories = {
     val dt = DateTime.now.minusHours(24)

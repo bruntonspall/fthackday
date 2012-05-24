@@ -1,14 +1,11 @@
-@(message: String, style: String = "Scala", playhome: String ="http://www.playframework.org")
+@main("News Stream") {
 
 <div class="container">
     <div class="row">
         <div class="push4 span8"><h1>News Stream</h1></div>
     </div>
     <div class=row>
-        <div class="span6" id="graph1"></div>
-    </div>
-    <div class=row>
-        <div id="my-timeline" style="height: 800px; border: 1px solid #aaa"></div>
+        <div id="my-timeline" style="height: 700px; border: 1px solid #aaa"></div>
     </div>
 </div>
 
@@ -76,3 +73,5 @@
         }
     })
 </script>
+
+}

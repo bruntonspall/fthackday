@@ -15,20 +15,18 @@
     $(function() {
         var bandInfos = [
             Timeline.createBandInfo({
-                width:          "70%",
+                width:          "30%",
                 intervalUnit:   Timeline.DateTime.MINUTE,
                 intervalPixels: 200,
                 date:           new Date(),
                 eventSource: es
             }),
             Timeline.createBandInfo({
-                width:          "30%",
+                width:          "70%",
                 intervalUnit:   Timeline.DateTime.HOUR,
                 intervalPixels: 200,
                 date:           new Date(),
-                eventSource: es,
-                overview: true
-
+                eventSource: es
             })
         ];
         bandInfos[1].syncWith = 0;

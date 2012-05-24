@@ -18,7 +18,7 @@ object MOStoryCollector extends StoryImporter {
         (item \ "title").text,
         (item \ "description").text,
         Nil,
-        parseDate((item \ "pubDate").text.reverse.drop(4).reverse),
+        parseDate((item \ "pubDate").text.reverse.drop(4).reverse).plusHours(1),
         "MO"
       )
   }

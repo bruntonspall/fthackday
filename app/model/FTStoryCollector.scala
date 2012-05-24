@@ -34,11 +34,20 @@ object FTStoryCollector extends StoryImporter {
                     "FT"
                   ))
                 }
-                case code => Left("Status code:%s was unexpected, \nresponse:\n%s" format (code, itemResponse.body))
+                case code => {
+                  log.error("Status code:%s was unexpected, \nresponse:\n%s" format (code, itemResponse.body))
+                  Left(AbstractStory(
+                    (result \ "title" \ "title").as[String],
+                    (result \ "summary" \ "excerpt").as[String],
+                    List(),
+                    parseDate((result \ "lifecycle" \ "lastPublishDateTime").as[String]),
+                    "FT"
+                  ))
+                }
               }
             }
           }
-      })) map {x :Seq[Either[String, AbstractStory]] => (x map (_.fold ({l => log.error(l); None} , {r => Some(r)}))).flatten }
+      })) map {x :Seq[Either[AbstractStory, AbstractStory]] => (x map (_.fold ({l => Some(l)} , {r => Some(r)}))).flatten }
     }
   }
 }

@@ -41,7 +41,7 @@ object Application extends Controller {
     val allStories : Promise[Seq[AbstractStory]] = for {
       gustory <- GUStoryCollector.storiesSince(dt)
       ftstory <- FTStoryCollector.storiesSince(dt)
-      nytstory <- NYTSearchStoryCollector.storiesSince(dt)
+      nytstory <- NYTNewsStreamStoryCollector.storiesSince(dt)
       wpstory <- WPStoryCollector.storiesSince(dt)
       mostory <- MOStoryCollector.storiesSince(dt)
     } yield gustory ++ ftstory ++ nytstory ++ wpstory ++ mostory
@@ -165,7 +165,7 @@ object Application extends Controller {
     "Guardian" -> GUStoryCollector,
     "FT" -> FTStoryCollector,
     "Daily Fail" -> MOStoryCollector,
-    "NYT" -> NYTSearchStoryCollector,
+    "NYT" -> NYTNewsStreamStoryCollector,
     "Wordpress" -> WPStoryCollector
   )
 }

@@ -2,7 +2,7 @@
 
 <div class="container">
     <div class="hero-unit" style="margin-top: 50px">
-        <h1 id='headline' data-publisher="GU">A long headline that might come from the mail</h1>
+        <h1 id='headline' data-publisher="GU">...</h1>
         <div style="margin-top: 25px; text-align: center">
             <button class="btn btn-primary" data-publisher="GU">Guardian</button>
             <button class="btn btn-danger" data-publisher="MO">MailOnline</button>
@@ -16,23 +16,37 @@
         <strong>Wrong!</strong> Nope, it actually came from <span id="title">Sheep Sheerers Weekly</span>
     </div>
     <div id="success" class="alert alert-success" style="display: none">
-        Yes you are right, it came from The Daily Planet
+        Yes you are right, it came from <span id="title">Sheep Sheerers Weekly</span>
     </div>
-    <div class="row">
-        <div class="push4 span4"><p>You have <h2 id="answer">2</h2> correct</div>
+    <div class="hero-unit">
+        <div class="push4 span4"><p>You have <span style="font-size: 26pt" id="answer">0</span> correct out of <span style="font-size: 26pt" id="total">0</span></div>
     </div>
     <script>
+        var sources = {
+            "GU": "The Guardian",
+            "NYT": "The New York Times",
+            "MO": "The Daily Fail",
+            "WP": "Wordpress.com",
+            "FT": "The Financial Times"
+        }
         $('.btn').click(function() {
             var pub = $(this).data("publisher");
             console.log(pub);
             var answer = $('#headline').data('publisher');
             if (answer == pub) {
                 $('#answer').text(Number($('#answer').text())+1);
+                $('#total').text(Number($('#total').text())+1);
                 $('#success').show("Blind");
                 $('#fail').hide("Blind");
+                $('#success span').text(sources[answer]);
+                newHeads();
             } else {
+                $('#total').text(Number($('#total').text())+1);
+
                 $('#success').hide("Blind");
                 $('#fail').show("Blind");
+                $('#fail span').text(sources[answer]);
+                newHeads();
             }
         })
 

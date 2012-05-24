@@ -25,7 +25,8 @@ object Application extends Controller {
       gustory <- GUStoryCollector.storiesSince(dt)
       ftstory <- FTStoryCollector.storiesSince(dt)
       nytstory <- NYTSearchStoryCollector.storiesSince(dt)
-    } yield gustory ++ ftstory ++ nytstory
+      wpstory <- WPStoryCollector.storiesSince(dt)
+    } yield gustory ++ ftstory ++ nytstory ++ wpstory
 
     allStories
   }
@@ -100,8 +101,8 @@ object Application extends Controller {
           ("title" -> JsString(o.headline))
           :: ("start") -> JsString(timeFormatter.print(o.publicationDate))
           :: ("color") -> JsString(colour_for(o.source))
-          :: ("description") -> JsString("<h1>%s</h1><p>%s</p><p><b>tags:</b>%s</p>".format(
-          o.source,o.headline,o.tags.mkString(", ")))
+          :: ("description") -> JsString("<p>%s</p><p><b>tags:</b>%s</p>".format(
+          o.trail,o.tags.mkString(", ")))
           :: Nil)
         }
       ) :: Nil

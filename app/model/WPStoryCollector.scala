@@ -3,8 +3,8 @@ package model
 import play.api.libs.ws.WS
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
-import play.api.libs.json.JsArray
 import play.api.Logger
+import play.api.libs.json.{JsObject, JsArray}
 
 object WPStoryCollector extends StoryImporter {
   val log = Logger("WPStoryCollector")
@@ -20,8 +20,12 @@ object WPStoryCollector extends StoryImporter {
         (response.json \ "posts").asInstanceOf[JsArray].value.map { result =>
             AbstractStory(
               (result \ "title").as[String],
-              "",
-              Nil,
+              (result \ "excerpt").as[String],
+              (result \ "tags") match {
+                case a:JsObject => a.keys.toSeq
+                case _ => Nil
+              }
+              ,
               parseDate((result \ "date").as[String]),
               "WP"
             )

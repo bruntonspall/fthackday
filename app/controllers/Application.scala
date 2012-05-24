@@ -11,7 +11,27 @@ import org.joda.time.format.ISODateTimeFormat
 
 object Application extends Controller {
   implicit val reads = Reads
-  import AbstractStory.GuImporterJsonWriter
+  import AbstractStory._
+
+  def colour_for(source: String):String = source match {
+    case "FT" => "salmon"
+    case "GU" => "#005689"
+    case "NYT" => "gray"
+    case "WP" => "#F1831E"
+    case "MO" => "#DD22E0"
+    case _ => "black"
+  }
+
+  def icon_for(source: String) = source match {
+    case "FT" => "http://www.ft.com/favicon.ico"
+    case "GU" => "http://www.guardian.co.uk/favicon.ico"
+    case "NYT" => "http://www.nytimes.com/favicon.ico"
+    case "WP" => "http://www.wordpress.com/favicon.ico"
+    case "MO" => "http://www.dailymail.co.uk/favicon.ico"
+    case _ => ""
+
+  }
+
   def index = Action {
     Ok(views.html.index("Your new application is ready."))
   }
@@ -26,7 +46,8 @@ object Application extends Controller {
       ftstory <- FTStoryCollector.storiesSince(dt)
       nytstory <- NYTSearchStoryCollector.storiesSince(dt)
       wpstory <- WPStoryCollector.storiesSince(dt)
-    } yield gustory ++ ftstory ++ nytstory ++ wpstory
+      mostory <- MOStoryCollector.storiesSince(dt)
+    } yield gustory ++ ftstory ++ nytstory ++ wpstory ++ mostory
 
     allStories
   }
@@ -61,6 +82,11 @@ object Application extends Controller {
     WPStoryCollector.storiesSince(DateTime.now.minusHours(24)) map (x => Ok(toJson(x)))
   }}
 
+//  def stats_mo = Action { Ok("") }
+  def stats_mo = Action { Async {
+    MOStoryCollector.storiesSince(DateTime.now.minusHours(24)) map (x => Ok(toJson(x)))
+  }}
+
 
   val stopwords = """-|i|me|my|myself|we|us|our|ours|ourselves|you|your|yours|yourself|yourselves|he|him|his|himself|she|her|hers|herself|it|its|itself|they|them|their|theirs|themselves|what|which|who|whom|whose|this|that|these|those|am|is|are|was|were|be|been|being|have|has|had|having|do|does|did|doing|will|would|should|can|could|ought|i'm|you're|he's|she's|it's|we're|they're|i've|you've|we've|they've|i'd|you'd|he'd|she'd|we'd|they'd|i'll|you'll|he'll|she'll|we'll|they'll|isn't|aren't|wasn't|weren't|hasn't|haven't|hadn't|doesn't|don't|didn't|won't|wouldn't|shan't|shouldn't|can't|cannot|couldn't|mustn't|let's|that's|who's|what's|here's|there's|when's|where's|why's|how's|a|an|the|and|but|if|or|because|as|until|while|of|at|by|for|with|about|against|between|into|through|during|before|after|above|below|to|from|up|upon|down|in|out|on|off|over|under|again|further|then|once|here|there|when|where|why|how|all|any|both|each|few|more|most|other|some|such|no|nor|not|only|own|same|so|than|too|very|say|says|said|shall"""
 
@@ -84,13 +110,6 @@ object Application extends Controller {
     Ok(views.html.cloud())
   }
 
-  def colour_for(source: String):String = source match {
-    case "FT" => "pink"
-    case "GU" => "blue"
-    case "NYT" => "gray"
-    case _ => "black"
-  }
-
   def to_timeline_json(events: Seq[AbstractStory]) = {
     lazy val timeFormatter = ISODateTimeFormat.dateTimeNoMillis.withZoneUTC()
 
@@ -101,6 +120,7 @@ object Application extends Controller {
           ("title" -> JsString(o.headline))
           :: ("start") -> JsString(timeFormatter.print(o.publicationDate))
           :: ("color") -> JsString(colour_for(o.source))
+          :: ("icon") -> JsString(icon_for(o.source))
           :: ("description") -> JsString("<p>%s</p><p><b>tags:</b>%s</p>".format(
           o.trail,o.tags.mkString(", ")))
           :: Nil)

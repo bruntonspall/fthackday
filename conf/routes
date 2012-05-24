@@ -10,6 +10,7 @@ GET     /stories/nyt/search                 controllers.Application.stats_nyt_se
 GET     /stories/ft                 controllers.Application.stats_ft
 GET     /stories/gu                 controllers.Application.stats_gu
 GET     /stories/wp                 controllers.Application.stats_wp
+GET     /stories/mo                 controllers.Application.stats_mo
 GET     /stories                 controllers.Application.stats
 GET     /allwords                 controllers.Application.allWords
 GET     /stories/wordcloud                 controllers.Application.wordCloud

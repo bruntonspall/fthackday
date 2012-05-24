@@ -5,19 +5,74 @@
         <div class="push4 span8"><h1>News Stream</h1></div>
     </div>
     <div class=row>
-        <div class="span4" id="graph1"></div>
+        <div class="span6" id="graph1"></div>
+    </div>
+    <div class=row>
+        <div id="my-timeline" style="height: 800px; border: 1px solid #aaa"></div>
     </div>
 </div>
 
 <script>
+    var tl;
+    var es = new Timeline.DefaultEventSource();
     $(function() {
-        var g = $("#graph1");
-        $.getJSON("/stories", function(results) {
-            console.log(results);
-            $.each(results, function(index, result) {
-                console.log(result);
-                g.append(tim("<li>{{headline}} - via {{source}}</li>", result));
+        var bandInfos = [
+            Timeline.createBandInfo({
+                width:          "70%",
+                intervalUnit:   Timeline.DateTime.HOUR,
+                intervalPixels: 200,
+                date:           "May 24 2012 10:00:00 GMT",
+                eventSource: es
+            }),
+            Timeline.createBandInfo({
+                width:          "30%",
+                intervalUnit:   Timeline.DateTime.DAY,
+                intervalPixels: 200,
+                date:           "May 24 2012 10:00:00 GMT",
+                eventSource: es
+
             })
-        })
+        ];
+        bandInfos[1].syncWith = 0;
+        bandInfos[1].highlight = true;
+        tl = Timeline.create(document.getElementById("my-timeline"), bandInfos);
+
+        tl.layout();
+
+        Timeline.loadJSON("/stories/timeline.json", function(json, url) { es.loadJSON(json, url); });
+        var g = $("#graph1");
+//        $.getJSON("/stories", function(results) {
+//            console.log(results);
+//            $.each(results, function(index, result) {
+//                g.append(tim("<li>{{headline}} - via {{source}}</li>", result));
+//                var c = "black"
+//                switch (result.source) {
+//                    case "FT": c = "pink"; break;
+//                    case "GU": c = "blue"; break;
+//                    case "NYT": c = "gray"; break;
+//                };
+//                var event = new Timeline.DefaultEventSource.Event( {
+//                    start: result.publicationDate,
+//                    end: result.publicationDate,
+//                    instant: true,
+//                    text: result.headline,
+//                    description: result.headline,
+//                    color: c
+//                })
+//                console.log(event);
+//                es.add(event);
+//            })
+//            tl.layout();
+//        });
+
+        var resizeTimerID = null;
+        function onResize() {
+            if (resizeTimerID == null) {
+                resizeTimerID = window.setTimeout(function() {
+                    resizeTimerID = null;
+                    tl.layout();
+                }, 500);
+            }
+        }
     })
 </script>

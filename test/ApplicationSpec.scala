@@ -4,6 +4,9 @@ import org.specs2.mutable._
 
 import play.api.test._
 import play.api.test.Helpers._
+import model.FTStoryCollector
+import play.api.cache.Cache
+import play.api.libs.concurrent.Promise
 
 /**
  * Add your spec here.
@@ -20,13 +23,26 @@ class ApplicationSpec extends Specification {
       }
     }
     
-    "render the index page" in {
+    "cache response if available" in {
       running(FakeApplication()) {
-        val home = routeAndCall(FakeRequest(GET, "/")).get
-        
-        status(home) must equalTo(OK)
-        contentType(home) must beSome.which(_ == "text/html")
-        contentAsString(home) must contain ("Your new application is ready.")
+        import play.api.Play.current
+
+        Cache.get("foo") should be (None)
+        FTStoryCollector.getOrElse("foo"){
+          Promise.pure(Right("foo"))
+        }
+        Cache.get("foo") should be equalTo (Some("foo"))
+      }
+    }
+    "not cache response if none" in {
+      running(FakeApplication()) {
+        import play.api.Play.current
+
+        Cache.get("foo") should be (None)
+        FTStoryCollector.getOrElse("foo"){
+          Promise.pure(Left("x"))
+        }
+        Cache.get("foo") should be equalTo (None)
       }
     }
   }

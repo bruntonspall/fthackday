@@ -164,6 +164,7 @@ object Application extends Controller {
   val collector = Map(
     "Guardian" -> GUStoryCollector,
     "FT" -> FTStoryCollector,
+    "Daily Fail" -> MOStoryCollector,
     "NYT" -> NYTSearchStoryCollector,
     "Wordpress" -> WPStoryCollector
   )

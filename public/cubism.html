@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 <meta charset="utf-8">
-<title>Cubism.js Demo</title>
+<title>Publishing rate sparklines</title>
 <style>
 
     @import url(stylesheets/cubism.css);
@@ -14,7 +14,7 @@
 
     var context = cubism.context()
             .step(1 * 60 * 1000)
-            .size(1000);
+            .size(900);
 
     d3.select("body").selectAll(".axis")
             .data(["top", "bottom"])

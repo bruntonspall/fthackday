@@ -67,7 +67,7 @@ object NYTSearchStoryCollector extends StoryImporter {
             title,
             tags,
             pubTime,
-            "FT"
+            "NYT"
           )
         }
     }

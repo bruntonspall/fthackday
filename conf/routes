@@ -14,6 +14,7 @@ GET     /stories/wp                 controllers.Application.stats_wp
 GET     /stories/mo                 controllers.Application.stats_mo
 GET     /stories                 controllers.Application.stats
 GET     /allwords                 controllers.Application.allWords
+GET     /headline                 controllers.Application.headline
 GET     /stories/wordcloud                 controllers.Application.wordCloud
 GET     /stories/timeline.json                 controllers.Application.stories_timeline_js
 

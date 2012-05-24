@@ -32,6 +32,10 @@ object Application extends Controller {
     Ok(views.html.timeline())
   }
 
+  def headline = Action {
+    Ok(views.html.headline())
+  }
+
   def allStories = {
     val dt = DateTime.now.minusHours(24)
     val allStories : Promise[Seq[AbstractStory]] = for {

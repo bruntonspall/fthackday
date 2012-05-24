@@ -26,7 +26,7 @@ object WPStoryCollector extends StoryImporter {
                 case _ => Nil
               }
               ,
-              parseDate((result \ "date").as[String]),
+              parseDate((result \ "editorial" \ "picked_on").as[String]),
               "WP"
             )
         }

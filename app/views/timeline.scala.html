@@ -5,7 +5,7 @@
         <div class="push4 span8"><h1>News Stream</h1></div>
     </div>
     <div class=row>
-        <div id="my-timeline" style="height: 700px; border: 1px solid #aaa"></div>
+        <div id="my-timeline" style="height: 500px; border: 1px solid #aaa"></div>
     </div>
 </div>
 
@@ -16,16 +16,16 @@
         var bandInfos = [
             Timeline.createBandInfo({
                 width:          "70%",
-                intervalUnit:   Timeline.DateTime.HOUR,
+                intervalUnit:   Timeline.DateTime.MINUTE,
                 intervalPixels: 200,
-                date:           "May 24 2012 10:00:00 GMT",
+                date:           new Date(),
                 eventSource: es
             }),
             Timeline.createBandInfo({
                 width:          "30%",
-                intervalUnit:   Timeline.DateTime.DAY,
+                intervalUnit:   Timeline.DateTime.HOUR,
                 intervalPixels: 200,
-                date:           "May 24 2012 10:00:00 GMT",
+                date:           new Date(),
                 eventSource: es,
                 overview: true
 

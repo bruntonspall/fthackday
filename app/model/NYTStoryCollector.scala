@@ -24,6 +24,7 @@ object NYTNewsStreamStoryCollector extends StoryImporter {
         results.value map { result =>
 
           val title = (result \ "title").as[String]
+          val trail = (result \ "abstract").as[String]
           val tags = (result \ "des_facet") match {
             case ts: JsArray => ts.value.map{v => v.as[String] }
             case _ => Nil
@@ -32,6 +33,7 @@ object NYTNewsStreamStoryCollector extends StoryImporter {
 
           AbstractStory(
             title,
+            trail,
             tags,
             pubTime,
             "NYT"
@@ -49,21 +51,23 @@ object NYTSearchStoryCollector extends StoryImporter {
 
   def storiesSince(dt: DateTime) = { // actually stories on (and only one page at that...)
 
-    WS.url("http://api.nytimes.com/svc/search/v1/article?format=json&query=+date:%s&fields=date,title,des_facet&api-key=%s".
-      format(dateFormat.print(dt), key)).get.map {
+    WS.url("http://api.nytimes.com/svc/search/v1/article?format=json&query=+date:%s&fields=abstract,date,title,des_facet&api-key=%s".
+      format(dt.toString(ISODateTimeFormat.basicDate()), key)).get.map {
       response =>
         val results = (response.json \ "results").asInstanceOf[JsArray]
         results.value map { result =>
 
           val title = (result \ "title").as[String]
+          val trail = (result \ "abstract").asOpt[String].getOrElse("")
           val tags = (result \ "des_facet") match {
             case ts: JsArray => ts.value.map{v => v.as[String] }
             case _ => Nil
           }
-          val pubTime = parseDate((result \ "date").as[String])
+          val pubTime = DateTime.parse((result \ "date").as[String], ISODateTimeFormat.basicDate())
 
           AbstractStory(
             title,
+            trail,
             tags,
             pubTime,
             "NYT"

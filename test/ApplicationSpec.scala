@@ -7,6 +7,7 @@ import play.api.test.Helpers._
 import model.FTStoryCollector
 import play.api.cache.Cache
 import play.api.libs.concurrent.Promise
+import cache.CacheThatMakesPromises
 
 /**
  * Add your spec here.
@@ -28,7 +29,7 @@ class ApplicationSpec extends Specification {
         import play.api.Play.current
 
         Cache.get("foo") should be (None)
-        FTStoryCollector.getOrElse("foo"){
+        CacheThatMakesPromises.getOrElse("foo"){
           Promise.pure(Right("foo"))
         }
         Cache.get("foo") should be equalTo (Some("foo"))
@@ -39,7 +40,7 @@ class ApplicationSpec extends Specification {
         import play.api.Play.current
 
         Cache.get("foo") should be (None)
-        FTStoryCollector.getOrElse("foo"){
+        CacheThatMakesPromises.getOrElse("foo"){
           Promise.pure(Left("x"))
         }
         Cache.get("foo") should be equalTo (None)

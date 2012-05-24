@@ -17,6 +17,7 @@ GET     /allwords                 controllers.Application.allWords
 GET     /headline                 controllers.Application.headline
 GET     /stories/wordcloud                 controllers.Application.wordCloud
 GET     /stories/timeline.json                 controllers.Application.stories_timeline_js
+GET     /metric/:source             controllers.Application.metric(source: String, start: String, stop: String, step: Int)
 
 
 # Map static resources from the /public folder to the /assets URL path

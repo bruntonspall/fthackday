@@ -20,6 +20,7 @@ object WPStoryCollector extends StoryImporter {
         (response.json \ "posts").asInstanceOf[JsArray].value.map { result =>
             AbstractStory(
               (result \ "title").as[String],
+              "",
               Nil,
               parseDate((result \ "date").as[String]),
               "WP"

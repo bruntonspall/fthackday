@@ -27,7 +27,7 @@
             .call(context.rule());
 
     d3.select("body").selectAll(".horizon")
-            .data(["Guardian", "FT", "NYT", "Wordpress"].map(metric))
+            .data(["Guardian", "FT", "Daily Fail", "NYT", "Wordpress"].map(metric))
             .enter().insert("div", ".bottom")
             .attr("class", "horizon")
             .call(context.horizon().extent([-10, 10]));

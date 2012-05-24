@@ -9,3 +9,17 @@
     </div>
 </div>
 }
+
+<script>
+
+var stories = [];
+$.getJSON("/stories", function(results) {
+    stories = results;
+});
+
+function newHeads() {
+    val storyCount = stories.length;
+    val s = stories[Math.random() * storyCount];
+}
+
+</script>

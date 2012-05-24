@@ -1,7 +1,7 @@
 @main("Guess The Headline") {
 <div class="container">
     <div class="hero-unit" style="margin-top: 50px">
-        <h1 data-publisher="GU">A long headline that might come from the mail</h1>
+        <h1 data-publisher="GU" id="headline">A long headline that might come from the mail</h1>
         <div>
             <button class="btn" data-publisher="GU">Guardian</button>
             <button class="btn" data-publisher="MO">MailOnline</button>
@@ -28,11 +28,17 @@
 var stories = [];
 $.getJSON("/stories", function(results) {
     stories = results;
+
+    newHeads();
 });
 
 function newHeads() {
-    val storyCount = stories.length;
-    val s = stories[Math.random() * storyCount];
+    var storyCount = stories.length;
+    var s = stories[Math.floor(Math.random() * storyCount)];
+
+    var foo = $("#headline");
+    foo.data("publisher", s.source);
+    foo.text(s.headline);
 }
 
 </script>

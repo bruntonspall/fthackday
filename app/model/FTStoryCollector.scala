@@ -2,12 +2,10 @@ package model
 
 import org.joda.time.DateTime
 import play.api.libs.ws.WS
-import org.joda.time.format.ISODateTimeFormat
 import play.api.libs.json.{JsValue, Reads, JsArray}
 import play.api.libs.concurrent.Promise
-import play.api.cache.Cache
 import cache.CacheThatMakesPromises
-import play.api.{Logger, Application}
+import play.api.Logger
 
 object FTStoryCollector extends StoryImporter {
   import play.api.Play.current
@@ -30,6 +28,7 @@ object FTStoryCollector extends StoryImporter {
                 case 200 => {
                   Right(AbstractStory(
                     (result \ "title" \ "title").as[String],
+                    (result \ "summary" \ "excerpt").as[String],
                     (itemResponse.json \ "item" \ "metadata" \ "tags" \\ "name").map(_.as[String]),
                     parseDate((result \ "lifecycle" \ "lastPublishDateTime").as[String]),
                     "FT"

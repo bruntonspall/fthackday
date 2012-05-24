@@ -12,6 +12,7 @@ GET     /stories/gu                 controllers.Application.stats_gu
 GET     /stories/wp                 controllers.Application.stats_wp
 GET     /stories                 controllers.Application.stats
 GET     /allwords                 controllers.Application.allWords
+GET     /stories/wordcloud                 controllers.Application.wordCloud
 GET     /stories/timeline.json                 controllers.Application.stories_timeline_js
 
 
